@@ -4,12 +4,16 @@ import {
     FastifyRequest,
 } from "fastify";
 import { z } from "zod";
+import { createSchema } from "zod-openapi";
 
 export interface RouteSchema {
     params?: z.ZodTypeAny;
     query?: z.ZodTypeAny;
     body?: z.ZodTypeAny;
-    response?: z.ZodTypeAny
+    response?: z.ZodTypeAny;
+    description?: string;
+    tags?: string[];
+    summary?: string;
 }
 
 const ApiResponseSchema = (response: z.ZodTypeAny) => z.union([
@@ -52,13 +56,50 @@ export const responseValidate = async (request: FastifyRequest, reply: FastifyRe
 
 export const setValidationParams = (schema: RouteSchema) => {
 
-    if (schema.response) {
-        schema.response = ApiResponseSchema(schema.response);
+    const openApiSchema: Record<string, unknown> = {}
+
+    if (schema.summary) {
+        openApiSchema.summary = schema.summary
     }
 
-    return {
-        config: {
-            schema: schema
-        }
+    if (schema.description) {
+        openApiSchema.description = schema.description
     }
-}
+
+    if (schema.tags) {
+        openApiSchema.tags = schema.tags
+    }
+
+    if (schema.params) {
+        openApiSchema.params = createSchema(schema.params).schema
+    }
+
+    if (schema.query) {
+        openApiSchema.query = createSchema(schema.query).schema
+    }
+
+    if (schema.body) {
+        openApiSchema.body = createSchema(schema.body).schema
+    }
+
+    if (schema.response) {
+
+        const responseSchema = ApiResponseSchema(schema.response)
+
+        const openApiResponseSchema = createSchema(responseSchema).schema;
+
+        openApiSchema.response = {
+            200: openApiResponseSchema
+        }
+
+        schema.response = responseSchema
+    }
+
+
+    return {
+        schema: openApiSchema,
+        config: {
+            schema,
+        },
+    };
+};

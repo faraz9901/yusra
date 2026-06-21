@@ -1,3 +1,3 @@
 import { z } from "zod";
 
-export const emptyReponseSchema = z.null() 
+export const emptyReponseSchema = z.null();

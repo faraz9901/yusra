@@ -1,14 +1,19 @@
 import { FastifyInstance } from "fastify";
 import { BaseService } from "../core/base.service";
-import { setValidationParams } from "../plugins/validation";
+import { setValidationParams } from "../plugins/routeConfig";
 import { emptyReponseSchema } from "../utils/empty.response";
 
 async function indexRoutes(fastify: FastifyInstance) {
-    fastify.get('/', setValidationParams({ response: emptyReponseSchema, }), async () => {
-        const baseService = new BaseService();
-        return baseService.sendOk(null, "Server is running");
-    });
-
+    fastify.get('/',
+        setValidationParams({
+            summary: 'Health check',
+            tags: ['Health'],
+            response: emptyReponseSchema,
+        }),
+        async () => {
+            const baseService = new BaseService();
+            return baseService.sendOk(null, "Server is running");
+        });
 }
 
 
