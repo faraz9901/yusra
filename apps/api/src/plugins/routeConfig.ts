@@ -22,7 +22,7 @@ const ApiResponseSchema = (response: z.ZodTypeAny) => z.union([
 ]);
 
 export const requestValidate = async (request: FastifyRequest) => {
-    const schema = (request.routeOptions.config as { schema?: RouteSchema })?.schema;
+    const schema = request.routeOptions.config.validationSchema;
 
     if (!schema) return;
 
@@ -42,7 +42,7 @@ export const requestValidate = async (request: FastifyRequest) => {
 
 
 export const responseValidate = async (request: FastifyRequest, reply: FastifyReply, payload: unknown): Promise<unknown> => {
-    const schema = (request.routeOptions.config as { schema?: RouteSchema })?.schema?.response;
+    const schema = request.routeOptions.config.validationSchema?.response;
 
     if (!schema) {
         return payload;
@@ -99,7 +99,7 @@ export const setValidationParams = (schema: RouteSchema) => {
     return {
         schema: openApiSchema,
         config: {
-            schema,
+            validationSchema: schema,
         },
     };
 };

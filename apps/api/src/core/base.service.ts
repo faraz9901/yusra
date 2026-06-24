@@ -1,11 +1,13 @@
+import { db } from "../db";
 import { Logger } from "./logger.service";
 
 export class BaseService {
-
     public logger: Logger
+    public db: typeof db
 
     constructor() {
         this.logger = new Logger(this.constructor.name || BaseService.name);
+        this.db = db
     }
 
 

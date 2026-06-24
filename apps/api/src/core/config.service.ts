@@ -9,7 +9,7 @@ if (isTest) {
 }
 
 // Central place for reading and validating environment variables
-type ENV_VARIABLES = 'PORT' | 'DATABASE_URL' | 'NODE_ENV';
+type ENV_VARIABLES = 'PORT' | 'DATABASE_URL' | 'NODE_ENV' | 'JWT_SECRET';
 
 class ConfigService {
 
@@ -46,6 +46,7 @@ const configService = new ConfigService(process.env)
         "PORT",
         "DATABASE_URL",
         "NODE_ENV",
+        "JWT_SECRET",
     ]);
 
 

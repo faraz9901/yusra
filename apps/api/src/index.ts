@@ -7,6 +7,7 @@ import { logger, requestLogger, responseLogger } from "./core/logger.service";
 import { errorHandler } from "./plugins/error-handler";
 import { requestValidate, responseValidate } from "./plugins/routeConfig";
 import indexRoutes from "./routes";
+import "./types/fastify";
 
 const app = Fastify();
 
