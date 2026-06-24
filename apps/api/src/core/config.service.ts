@@ -9,7 +9,7 @@ if (isTest) {
 }
 
 // Central place for reading and validating environment variables
-type ENV_VARIABLES = 'PORT'
+type ENV_VARIABLES = 'PORT' | 'DATABASE_URL' | 'NODE_ENV';
 
 class ConfigService {
 
@@ -44,6 +44,8 @@ class ConfigService {
 const configService = new ConfigService(process.env)
     .ensureValues([
         "PORT",
+        "DATABASE_URL",
+        "NODE_ENV",
     ]);
 
 
